@@ -60,3 +60,29 @@ def test : IO Unit := do
 
 #eval test -- B's side effect has emerged
 
+-- flexible layouts for do
+def mouth : IO Unit := do 
+  let stdin ← IO.getStdin
+  let stdout ← IO.getStdout
+
+  stdout.putStrLn "How would you like to be addressed?"
+  let name := (← stdin.getLine).trim
+  stdout.putStrLn s!"Hello, {name}!"
+
+-- as explicit as possible
+def mouth' : IO Unit := do {
+  let stdin ← IO.getStdin;
+  let stdout ← IO.getStdout;
+
+  stdout.putStrLn "How would you like to be addressed?";
+  let name := (← stdin.getLine).trim;
+  stdout.putStrLn s!"Hello, {name}!";
+}
+    
+-- semicolon to put 2 actions on the same line
+def mouth'' : IO Unit := do 
+  let stdin ← IO.getStdin; let stdout ← IO.getStdout
+
+  stdout.putStrLn "How would you like to be addressed?"
+  let name := (←stdin.getLine).trim
+  stdout.putStrLn s!"Hello, {name}!"
